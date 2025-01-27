@@ -1,0 +1,62 @@
+<div class="container mt-5">
+    <div class="row justify-content-md-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg">
+                <div class="card-header text-center bg-light text-success">
+                    <i class="bi bi-gear"></i>
+                    <h4>Profile Settings</h4>
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="profileSettingsForm" (ngSubmit)="onSubmit()">
+                        <div class="form-group mb-3">
+                            <label for="displayName" class="form-label">DisplayName</label>
+                            <input type="text" class="form-control" id="displayName" formControlName="displayName" placeholder="Enter Displayname"
+                            [ngClass]="{'is-invalid':profileSettingsForm.get('displayName')?.invalid && profileSettingsForm.get('displayName')?.touched}"/>
+                            @if(profileSettingsForm.get('displayName')?.invalid && (profileSettingsForm.get('displayName')?.dirty || profileSettingsForm.get('displayName')?.touched)) {
+                                    <div class="invalid-feedback">
+                                        @if (profileSettingsForm.get('displayName')?.hasError('minlength')) {
+                                            <div class="text-danger small">Displayname must be at least 3 characters long</div>
+                                        }
+                                    </div>
+                                }
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="password" class="form-label">Password </label>
+                            <input type="password" id="password" placeholder="Enter Password" formControlName="password" class="form-control"
+                            [ngClass]="{'is-invalid':profileSettingsForm.get('password')?.touched && profileSettingsForm.get('password')?.invalid }"/>
+                            @if(profileSettingsForm.get('password')?.invalid && (profileSettingsForm.get('password')?.dirty || profileSettingsForm.get('password')?.touched)){
+                                <div class="invalid-feedback">
+                                    @if (profileSettingsForm.get('password')?.hasError('minlength')){
+                                        <div class="text-danger small">Password must be at least 8 characters long</div>
+                                    }
+                                    @else if (profileSettingsForm.get('password')?.hasError('pattern')){
+                                        <div class="text-danger small">Password should contain one upper and one lower case letter and one digit along with one special character</div>
+                                    }
+                                </div>
+                            }
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="email" class="form-label">Email </label>
+                            <input type="email" class="form-control" id="email" placeholder="Enter Email" formControlName="email"
+                            [ngClass]="{'is-invalid':profileSettingsForm.get('email')?.touched && profileSettingsForm.get('email')?.invalid }"/>
+                            @if(profileSettingsForm.get('email')?.invalid && profileSettingsForm.get('email')?.touched){
+                                <div class="invalid-feedback">
+                                    @if(profileSettingsForm.get('email')?.hasError('email')){
+                                        <div class="text-danger small">Enter a valid email address</div>
+                                    }
+                                </div>
+                            }
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-primary " type="submit" [disabled]="profileSettingsForm.invalid">Save Changes</button>
+                            <button class="btn btn-secondary " type="button" (click)="onBack()">Back</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

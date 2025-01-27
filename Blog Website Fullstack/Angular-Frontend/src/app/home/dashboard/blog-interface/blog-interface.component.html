@@ -1,0 +1,106 @@
+<div class="container-fluid">
+    <div class="row gx-0 ms-2 me-1">
+        <div class="container mt-3 mb-2 ms-3 me-1 col-md-7 col-12 p-1 rounded d-flex flex-column"
+            style="min-height: 80vh;">
+            <div class="card p-2 shadow bg-light d-flex flex-column justify-content-between" style="height: 100%;">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <strong class="text-muted small d-block"><i>Author: {{blog.userName }}</i></strong>
+                        <small class="text-muted small d-block"><i>Created: {{blog.createdAt | date}}</i></small>
+                        <small class="text-muted small"><i>Updated: {{blog.updatedAt | date}}</i></small>
+                    </div>
+                    @if ((checkTime(blog.createdAt) || blog.isRemoved) && (blog.userName == currentUser)) {
+                    <div>
+                        <button class="btn btn-lg" (click)="onEdit()">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+                    </div>
+                    }
+                </div>
+                <h3 class="text-center ">{{blog.title}}</h3>
+                <div class="mt-0 mb-2">
+                    <img src="#" alt="User" class="rounded-circle" width="50" height="50" />
+                </div>
+
+                @if(blog.media){
+                @for (file of blog.media; track $index) {
+                <img [src]="convertToImage(file)" [alt]="file.filename" width="50px" height="50px">
+                }
+                }
+
+                @for (cont of blog.content; track $index) {
+                @if (cont.type == 'text') {
+                <p class="m-0" style="white-space: pre-wrap;">{{cont.content}}</p>
+                }
+                @if ( cont.type == 'code' ) {
+                <div class="m-0 bg-dark">
+                    <div class=" m-0 d-flex justify-content-end">
+                        <i class="bi bi-copy text-light m-0 p-1 btn" (click)="copyCode(cont.content)"></i>
+                    </div>
+                    <p class="m-0" style="white-space: pre-wrap;" [innerHTML]="cont.content | highlight">
+
+                    </p>
+                </div>
+                }
+                }
+
+                @if(blog.tags && blog.tags.length > 0){
+                <div class="mt-3 mb-4">
+                    @for(tag of blog.tags ; track $index){
+                    <span class="badge bg-secondary me-2 ">#{{tag}}</span>
+                    }
+                </div>
+                }
+                <div class="row p-0 m-0 flex-end" style="margin-top: auto;">
+                    <div class="d-flex justify-content-between ">
+                        <div class="mt-2">
+                            <button class="btn btn-outline-primary btn-sm  " (click)="addLike(blog._id)">
+                                <i [class]="blog.likedUsers.indexOf(currentUser) != -1 ? 'bi bi-hand-thumbs-up-fill' : 'bi bi-hand-thumbs-up' "></i>
+                                {{blog.likes}}
+                            </button>
+
+                        </div>
+                        <div>
+                            @if (blog.userName === currentUser) {
+                            <button class="btn btn-outline-danger mt-2 me-2" (click)="onRemove()">Remove</button>
+                            }
+                            <button class="btn btn-outline-secondary mt-2 " (click)="onBack()">Back</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container mb-3 mt-3  col-12 col-md-4 rounded comments "
+            style="margin-left: 0; margin-right: 0;height: 90vh; min-width: 39%">
+            <div class="card p-0 shadow bg-light" style="height: 90%; overflow-y: auto;">
+                <div class="bg-dark text-center text-light rounded">
+                    <span class="mt-1">
+                        <h5>Comments</h5>
+                    </span>
+                </div>
+                @if(comments && comments.length > 0){
+                @for(comment of comments; track $index){
+                <app-comment [comment]="comment" [count]="count+1"></app-comment>
+                }
+                }
+                @else{
+                <div class="text-center mt-3">No Comments</div>
+                }
+                @if(!islastPage){
+                <div class="text-center text-muted" style="width: 100%;">
+                    <button class="btn btn-success p-1 m-1" (click)="loadMoreComments()">Load More</button>
+                </div>
+                }
+
+            </div>
+            <div>
+                <input type="text" class="rounded mt-2 " [(ngModel)]="newComment" placeholder="Add new comment"
+                    style="width: 80%;">
+                <button class="btn text-light p-1 ms-1 bg-secondary rounded small" [disabled]="!newComment"
+                    (click)="addComment()"><i class="bi bi-send"></i></button>
+                <button class="btn btn-info text-light p-1 m-1" (click)="onRefreshComments()"><i
+                        class="bi bi-arrow-clockwise"></i></button>
+            </div>
+        </div>
+    </div>
+</div>

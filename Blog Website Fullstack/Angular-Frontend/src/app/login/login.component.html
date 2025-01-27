@@ -1,0 +1,38 @@
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card bg-light" style="width: 25rem;">
+        <div class="card-body p-0">
+            <div class="card-header text-center bg-primary text-white">
+                <h3>Sign In</h3>
+            </div>
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="p-3 mt-2">
+                <div class="form-group mb-3" style="margin-right: 40px;">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" formControlName="userName">
+                    @if(loginForm.get('userName')?.invalid && (loginForm.get('userName')?.dirty || loginForm.get('userName')?.touched)){
+                        <div class="text-danger small">Username is required</div>
+                    }
+                </div>
+
+
+                <div class="form-group position-relative">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-group">
+                        <input type="{{showPassword ? 'text' : 'password'}}" id="password" class="form-control " formControlName="password" >
+                        <button class="btn " type="button" (click)="togglePassword()" tabindex="-1"><i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye' "></i></button>
+                    </div>
+                    @if(loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)){
+                        <div class="text-danger small">Password is required</div>
+                    }
+                </div>
+                
+                <div class="text-center">                    
+                    <button type="submit" class="btn btn-primary btn-block mt-3" [disabled]="loginForm.invalid">Sign In</button>
+                </div>
+                <div class="text-center mt-3">
+                    <small class="text-muted"><i>Don't have an Account ?</i></small>
+                    <a class="btn btn-link" (click)="signUp()">Sign Up</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

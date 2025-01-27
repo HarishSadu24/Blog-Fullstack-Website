@@ -1,0 +1,101 @@
+<div class="container rounded mt-2 col-md-7 bg-light border mb-3 p-0">
+    <form [formGroup]="blogForm">
+        <div class="text-center p-0 m-0">
+            <h2 class="text-light bg-dark rounded">New Blog</h2>
+        </div>
+        <div class="mb-3 mt-3 p-2">
+            <div class="form-group ">
+                <label for="title" class="form-label">Title :</label>
+                <input type="text" class="form-control border border-dark" id="title" formControlName="title"
+                    placeholder="Enter Title">
+            </div>
+            @if(blogForm.get('title')?.invalid && (blogForm.get('title')?.dirty || blogForm.get('title')?.touched))
+            {
+            @if(blogForm.get('title')?.errors?.['required']){
+            <div class="text-danger small">Title is required</div>
+            }
+            @else if(blogForm.get('title')?.errors?.['minlength']){
+            <div class="text-danger small">Title must be atleast 3 characters</div>
+            }
+            }
+        </div>
+        <div class="mb-3 p-2">
+            @for (cont of content; track $index) {
+                <div>
+                    @if(cont.type == 'text'){                        
+                        <p class="mb-2" style="white-space: pre-wrap;" [innerHTML]="cont.content"></p>
+                    }
+                    @else if(cont.type == 'code'){
+                        <p class="mb-2" style="white-space: pre-wrap;" [innerHTML]="cont.content | highlight"></p>
+                    }
+                </div>
+            }
+            <div class="d-flex justify-content-between align-items-center mb-1">
+                <label for="description" class="form-label">Content : </label>
+                <select #type class="form-select w-auto">
+                    <option value="text" default="true">text</option>
+                    <option value="code">code</option>
+                </select>
+            </div>
+            <div class="form-group ">
+                <textarea #description id="description" rows="4" formControlName="content"
+                    placeholder="Write your Blog content here" required
+                    class="form-control border border-dark mb-2"></textarea>
+                <button class="btn btn-success btn-sm" (click)="addContent(description,type)"
+                [disabled]="description.value.length < 3" >Add Content</button>
+            </div>
+            @if(blogForm.get('content')?.invalid && (blogForm.get('content')?.dirty ||
+            blogForm.get('content')?.touched))
+            {
+            @if(blogForm.get('content')?.errors?.['required'] || (content.length < 1)){
+            <div class="text-danger small">Content is required</div>
+            }
+            }
+        </div>
+
+        <div class="form-group mb-3 p-2">
+            <label for="tags" class="form-label me-1">Select Tags : </label>
+            <select (change)="checkTags()" class="form-control " style="border-radius: 8%;" id="tags"
+                class="border border-dark" formControlName="customTag">
+                @for(tag of uniqueTags; track $index){
+                <option [value]="tag" (change)="checkTags()">{{tag}}</option>
+                }
+
+                <option value="other">Other</option>
+            </select>
+            @if(this.showAddInputTag){
+            <div>
+                <label for="customTag" class="form-label">Enter Custom Tag : </label>
+                <input type="text" formControlName="customTag" placeholder="Add new Tag" id="customTag"
+                    class="border border-dark" />
+                <button class="btn btn-warning" (click)="addCustomTag()">Add</button>
+            </div>
+            }
+        </div>
+
+        <div class="form-group mb-2 p-2">
+            <label for="selected-tags" class="form-label">Selected Tags : </label>
+            @if (selectedTags) {
+            <div class="selected-tags border border-dark form-control d-flex flex-wrap" id="selected-tags">
+                @for(tag of selectedTags; track $index ){
+                <span class="badge m-1" style="color: black; background-color: rgb(233, 194, 22);">
+                    #{{tag}}
+                    <button (click)="removeTag($index)" class="btn selected-tag p-0 m-0">X</button>
+                </span>
+                }
+            </div>
+            }
+        </div>
+
+        <div class="form-group mb-3 p-2">
+            <label for="media" class="form-label">Media : </label>
+            <input type="file" class="form-control border border-dark" id="media" accept="image/*,video/*"
+                (change)="onMediaChange($event)">
+        </div>
+        <div class="col-md-12 p-2 text-center mb-3 d-flex justify-content-between">
+            <button (click)="onSubmit()" class="btn btn-primary"
+                [disabled]="!blogForm.valid || (content.length < 1)">Submit</button>
+            <button class="btn btn-outline-secondary" (click)="onCancel()">Cancel</button>
+        </div>
+    </form>
+</div>

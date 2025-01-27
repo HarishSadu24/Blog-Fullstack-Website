@@ -1,0 +1,96 @@
+<div class="container rounded mt-2 col-md-7 bg-light border mb-3 p-0">
+    <div class="text-center bg-dark">
+        <h2 class="text-light">Edit Blog</h2>
+    </div>
+    <form [formGroup]="editBlogForm" class="p-2">
+        <div class="mb-3 mt-3">
+            <div class="form-group">
+                <label for="title" class="form-label">Title : </label>
+                <input type="text" class="form-control  border border-dark" id="title" formControlName="title"
+                    placeholder="Enter Title"
+                    [ngClass]="{'is-invalid':editBlogForm.get('title')?.invalid && editBlogForm.get('title')?.touched}" />
+            </div>
+            <div class="invalid-feedback">
+                @if(editBlogForm.get('title')?.invalid && (editBlogForm.get('title')?.dirty ||
+                editBlogForm.get('title')?.touched))
+                {
+                @if(editBlogForm.get('title')?.errors?.['required']){
+                <div class="text-danger small">Title is required</div>
+                }
+                @else if(editBlogForm.get('title')?.errors?.['minlength']){
+                <div class="text-danger small">Title must be atleast 3 characters</div>
+                }
+                }
+            </div>
+        </div>
+        <div class="mb-3">
+            @for (cont of content; track $index) {
+            <div class="d-flex justify-content-between">
+                <textarea #text [rows]="cont.content.split('\n').length" class="form-control mb-1"
+                    style="white-space: pre-wrap;" [value]="cont.content"
+                    (input)="cont.content = text.value"></textarea>
+                <i class="bi bi-x-circle" (click)="removeContent($index)"></i>
+            </div>
+            }
+            <div class="d-flex justify-content-between align-items-center mb-1">
+                <label for="description" class="form-label">Content : </label>
+                <select #type class="form-select w-auto">
+                    <option value="text" default="true">text</option>
+                    <option value="code">code</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <textarea #description id="description" rows="3" formControlName="content"
+                    placeholder="Write your Blog content here" required
+                    class="form-control border border-dark mb-2"></textarea>
+                <button class="btn btn-success btn-sm" (click)="addContent(description,type)"
+                    [disabled]="description.value.length < 3">Add Content</button>
+            </div>
+
+            @if (content.length < 1){ <div class="text-danger small">Content is required
+        </div>
+        }
+</div>
+
+<div class="form-group mb-3">
+    <label for="tags" class="form-label me-1">Select Tags : </label>
+    <select (change)="checkTags()" style="border-radius: 8%;" id="tags" formControlName="customTag">
+        @for(tag of uniqueTags; track $index){
+        <option [value]="tag" (change)="checkTags()">{{tag}}</option>
+        }
+        <option value="other">Other</option>
+    </select>
+    @if(showAddInputTag){
+    <div>
+        <label for="customTag" class="form-label">Enter Custom Tag : </label>
+        <input type="text" formControlName="customTag" placeholder="Add new Tag" id="customTag" />
+        <button class="btn btn-warning" (click)="addCustomTag()">Add</button>
+    </div>
+    }
+</div>
+
+<div class="form-group mb-2">
+    <label for="selected-tags" class="form-label">Selected Tags : </label>
+    @if (selectedTags) {
+    <div class="selected-tags form-control  border border-dark d-flex flex-wrap" id="selected-tags">
+        @for(tag of selectedTags; track $index ){
+        <span class="badge m-1" style="color: black; background-color: rgb(233, 194, 22);">
+            #{{tag}}
+            <button (click)="removeTag($index)" class="btn selected-tag p-0 m-0">X</button>
+        </span>
+        }
+    </div>
+    }
+</div>
+
+<div class="form-group mb-3">
+    <label for="media" class="form-label">Media : </label>
+    <input type="file" class="form-control  border border-dark" id="media" accept="image/*,video/*"
+        (change)="onMediaChange($event)">
+</div>
+<div class="col-md-12 d-flex justify-content-between">
+    <button (click)="onSaveChanges()" class="btn btn-success" [disabled]="(content.length < 1)">Save Changes</button>
+    <button (click)="onBack()" class="btn btn-outline-secondary">Back</button>
+</div>
+</form>
+</div>

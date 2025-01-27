@@ -1,0 +1,23 @@
+<nav class="navbar btn navbar-expand-lg navbar-light bg-light bg-gradient text-white shadow-sm p-3">
+    <div class="container-fluid">
+        <a class="navbar-brand" (click)="onBlog()"><strong>BlogApp</strong></a>
+    <div class="d-flex ms-auto dropdown">
+        <!-- <button class="btn btn-primary me-2" (click)="onClick('blog')">Add Blog</button>
+        <button class="btn btn-secondary me-2" (click)="onClick('profile')">Profile</button>
+        <button class="btn btn-danger" (click)="onClick('login')">Logout</button> -->
+
+        @if (router.url != '/mainmenu/blog') {
+            <button class="btn btn-outline-dark me-2 p-1 rounded" (click)="onClick('blog')"><i class="bi bi-plus-square-fill p-0 m-0"> New Blog</i></button>
+        }
+        <button class="btn btn-outline-secondary rounded-circle dropdown-toggle p-2" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="border: 0px;">
+            <i class="bi bi-person-circle fs-4"></i>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded" aria-labelledby="profileDropdown">
+            <li> <button class="dropdown-item d-flex align-items-center text-primary" (click)="onClick('profile')"><i class="bi bi-gear me-2 "></i> Profile Settings</button> </li>
+            <li> <button class="dropdown-item d-flex align-items-center text-danger" (click)="onLogout()"><i class="bi bi-box-arrow-right me-2"></i> Logout</button> </li>
+        </ul>
+
+    </div>
+    </div>
+</nav>
+ 

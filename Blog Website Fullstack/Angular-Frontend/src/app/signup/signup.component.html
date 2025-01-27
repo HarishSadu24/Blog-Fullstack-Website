@@ -1,0 +1,96 @@
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg">
+                <div class="card-header text-center bg-primary text-white">
+                    <i class="bi bi-person-lines-fill"></i>
+                    <h3>SignUp</h3>
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+                        <div class="form-group mb-3">
+                            <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
+                            <input type="text" id="username" placeholder="Enter Username" formControlName="userName" class="form-control"
+                            [ngClass]="{'is-invalid':signupForm.get('userName')?.touched && signupForm.get('userName')?.invalid }"/>
+                            @if(signupForm.get('userName')?.invalid && (signupForm.get('userName')?.dirty || signupForm.get('userName')?.touched)){
+                                <div class="invalid-feedback">
+                                    @if(signupForm.get('userName')?.hasError('required')){
+                                        <div class="text-danger small">Username is required</div>
+                                    }
+                                    @else if (signupForm.get('userName')?.hasError('minlength')){
+                                        <div class="text-danger small">Username must be at least 3 characters long</div>
+                                    }
+                                </div>
+                            }
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="displayname" class="form-label">Displayname <span class="text-danger">*</span></label>
+                            <input type="text" id="displayname" placeholder="Enter Displayname" formControlName="displayName" class="form-control"
+                            [ngClass]="{'is-invalid':signupForm.get('displayName')?.touched && signupForm.get('displayName')?.invalid }"/>
+                            @if(signupForm.get('displayName')?.invalid && (signupForm.get('displayName')?.dirty || signupForm.get('displayName')?.touched)){
+                                <div class="invalid-feedback">
+                                    @if(signupForm.get('displayName')?.hasError('required')){
+                                        <div class="text-danger small">Displayname is required</div>
+                                    }
+                                    @else if (signupForm.get('displayName')?.hasError('minlength')){
+                                        <div class="text-danger small">Displayname must be at least 3 characters long</div>
+                                    }
+                                </div>
+                            }
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
+                            <input type="password" id="password" placeholder="Enter Password" formControlName="password" class="form-control"
+                            [ngClass]="{'is-invalid':signupForm.get('password')?.touched && signupForm.get('password')?.invalid }"/>
+                            @if(signupForm.get('password')?.invalid && (signupForm.get('password')?.dirty || signupForm.get('password')?.touched)){
+                                <div class="invalid-feedback">
+                                    @if(signupForm.get('password')?.hasError('required')){
+                                        <div class="text-danger small">Password is required</div>
+                                    }
+                                    @else if (signupForm.get('password')?.hasError('minlength')){
+                                        <div class="text-danger small">Password must be at least 8 characters long</div>
+                                    }
+                                    @else if (signupForm.get('password')?.hasError('pattern')){
+                                        <div class="text-danger small">Password should contain one upper and one lower case letter and one digit along with one special character</div>
+                                    }
+                                </div>
+                            }
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="confirm-password" class="form-label">Confirm Password <span class="text-danger">*</span></label>
+                            <input type="password" id="confirm-password" placeholder="Enter Confirm Password" formControlName="confirmPassword" class="form-control"
+                            [ngClass]="{'is-invalid':signupForm.hasError('mismatch') && signupForm.get('confirmPassword')?.touched }"/>
+                            @if(signupForm.get('confirmPassword')?.touched && signupForm.hasError('mismatch')){
+                                <div class="invalid-feedback text-danger small">                   
+                                    Passwords do not match
+                                </div>
+                            }
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="email" class="form-label">Email <span class="opacity-75">(optional)</span></label>
+                            <input type="email" class="form-control" id="email" placeholder="Enter Email" formControlName="email"
+                            [ngClass]="{'is-invalid':signupForm.get('email')?.touched && signupForm.get('email')?.invalid }"/>
+                            @if(signupForm.get('email')?.invalid && signupForm.get('email')?.touched){
+                                <div class="invalid-feedback">
+                                    @if(signupForm.get('email')?.hasError('email')){
+                                        <div class="text-danger small">Enter a valid email address</div>
+                                    }
+                                </div>
+                            }
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-outline-primary" type="submit" [disabled]="signupForm.invalid">Sign Up</button>
+                            <button class="btn btn-outline-danger" (click)="onCancel()" >Cancel</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

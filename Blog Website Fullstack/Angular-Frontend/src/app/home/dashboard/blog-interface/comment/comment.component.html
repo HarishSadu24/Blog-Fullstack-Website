@@ -1,0 +1,64 @@
+<div class="border border-secondary p-1 bg-white rounded shadow comment">
+    <div class="small d-flex justify-content-between">
+        <strong><i class="bi bi-person-fill"></i>{{comment.userName}}</strong>
+        <div class="d-flex justify-content-around">
+            <span class="small text-muted">{{comment.createdAt | date}}</span>
+            <i class="bi bi-trash ms-1 btn" (click)="deleteComment(comment._id)"></i>
+        </div>
+    </div>
+    @if (!isEdit) {
+    <div class="small">{{comment.comment}}</div>
+    }
+    @else {
+    <input type="text" class="rounded" style="width: 85%;" [(ngModel)]="editedComment">
+    <button class="btn btn-outline-success m-0 p-1 ms-1" (click)="editComment()">Save</button>
+    }
+    <div class="d-flex justify-content-between">
+        @if(count <= 4){ <a class="text-muted navbar-brand btn p-0" (click)="showReplies()">
+            @if(!isShowReplies){
+            <small>Show Replies</small>
+            }
+            @else {
+            <small>Hide Replies</small>
+            }
+            </a>
+            }
+            <div>
+                @if (comment.userName == currentUser && checkTime()) {
+                <a class="p-0 navbar-brand btn " (click)="onEdit()"><i class="bi bi-pen text-success"></i></a>
+                }
+                <a class="p-0 navbar-brand btn ms-2 text-primary" (click)="addLike()">
+                    <i [class]="comment.likedUsers.indexOf(currentUser) != -1 ? 'bi bi-hand-thumbs-up-fill' : 'bi bi-hand-thumbs-up' "></i>{{comment.likedUsers.length}}</a>
+            </div>
+    </div>
+    @if (count <= 4) { <a class="p-0 navbar-brand btn reply d-block" (click)="giveReply()"><i class="bi bi-reply"></i>
+        <small class="text-muted"> Reply</small></a>
+
+        @if (isGiveReply) {
+        <input type="text" class="rounded mt-2 ms-2 " style="width: 85%;" [(ngModel)]="newReply"
+            placeholder="Give Reply">
+        <button class="btn text-light navbar-brand ms-1 bg-primary rounded small" style="padding: 1%;" [disabled]="!newReply"
+            (click)="addReply()"><i class="bi bi-send p-0 m-0"></i></button>
+        }
+        }
+
+        @if (isShowReplies) {
+        <div class="ms-3 ">
+            <div class="rounded border border-secondary shadow">
+                @if (replies && replies.length > 0) {
+                @for (reply of replies; track $index) {
+                <app-comment [comment]="reply" [count]="count+1"></app-comment>
+                }
+                }
+                @else {
+                <div>No Replies</div>
+                }
+            </div>
+            @if(!isLastPage){
+            <div class="text-center text-muted" (click)="lodeMoreReplies()" style="width: 100%;">
+                <button class="btn btn-success p-1 m-1">Load More</button>
+            </div>
+            }
+        </div>
+        }
+</div>

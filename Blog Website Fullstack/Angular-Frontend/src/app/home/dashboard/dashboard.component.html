@@ -1,0 +1,114 @@
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        @if(!isRemovedPage){
+        <h4 class="mb-0">My Blogs</h4>
+        }
+        @else {
+        <h4 class="mb-0">Removed Blogs</h4>
+        }
+        <div class="d-flex justify-content-end">
+
+            @if(!isRemovedPage){
+            <select (change)="updateSorting()" [(ngModel)]="sortBy"
+                class=" form-select form-select-sm me-3 border-success ">
+                <option value="createdAt">By Time</option>
+                <option value="likes">By Likes</option>
+            </select>
+            <select [(ngModel)]="filter" class="form-select form-select-sm me-3 border-danger "
+                (change)="updateFilter()">
+                <option value="all" selected disabled>Select Blogs</option>
+                <option value="all">All Blogs</option>
+                <option value="user">User Blogs</option>
+            </select>
+            }
+            <div class="form-check form-switch">
+                <input type="checkbox" [(ngModel)]="isRemovedPage" (change)="onToggleSwitch()" class="form-check-input"
+                id="customSwitch">
+            </div>
+            <label for="customSwitch" class="form-check-label small">Removed Blogs</label>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        @for (blog of blogs; track $index) {
+        <div class="col-lg-6 col-md-6 mb-4 rounded">
+            <div class="card h-100 shadow-md">
+                <div class="card-body d-flex flex-column p-3" style="height: 100%;">
+                    <div class="d-flex justify-content-between ">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <img src="#" [alt]="'User'" class="rounded-circle" width="50" height="50" />
+                            </div>
+
+                            <div class=" p-0 ">
+                                <h6 class="mb-0">{{blog.title}}</h6>
+                                <small class="text-muted"><i class="bi bi-person-fill"></i>
+                                    {{blog.userName}}</small><br>
+                                <small class="text-muted">Created: {{blog.createdAt | date}}</small><br>
+                                <small class="text-muted">Updated: {{blog.updatedAt | date}}</small>
+                            </div>
+                        </div>
+                        @if(isRemovedPage){
+                        <div>
+                            <a class="bg-light rounded-circle text-secondary settings" id="profileDropdown"
+                                data-bs-toggle="dropdown" style="border: 0px;">
+                                <i class="bi bi-sliders "></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded"
+                                aria-labelledby="profileDropdown">
+                                <li> <button class="dropdown-item text-primary" (click)="onEdit(blog._id)">
+                                        <i class="bi bi-gear me-2 "></i>Edit Blog</button> </li>
+                                <li> <button class="dropdown-item text-danger" (click)="onDelete(blog._id)"><i
+                                            class="bi bi-trash me-2"></i>Delete</button> </li>
+                                <li> <button class="dropdown-item text-success" (click)="onRepublish(blog._id)"><i
+                                            class="bi bi-box-arrow-right me-2"></i>Republish</button> </li>
+                            </ul>
+                        </div>
+                        }
+                    </div>
+
+                    @if(blog.content[0].content.length > 20){
+                    <pre class="mt-3 mb-2 small">{{blog.content[0].content | slice:0:20}}...</pre>
+                    }
+                    @else {
+                    <p class="mt-3 mb-2 small">{{ blog.content[0].content }}</p>
+                    }
+
+                    @if(blog.tags?.length > 0){
+                    <div class="mt-3">
+                        @for(tag of blog.tags ; track $index){
+                        <span class="badge text-dark border border-secondary me-2">#{{tag}}</span>
+                        }
+                    </div>
+                    }
+
+
+                    <div class="d-flex justify-content-between " style="margin-top: auto;">
+                        @if(!isRemovedPage){
+                        <button class="btn btn-outline-dark mt-2 ms-0 fst-italic " style="size: 10px;"
+                            (click)="onReadMore(blog._id)">Readmore</button>
+                        }
+                        @else{
+                        <div></div>
+                        }
+                        <button class="btn btn-outline-primary btn-sm me-2 mt-1 py-1 px-2" (click)="addLike(blog._id)">
+                            <i [class]="blog.likedUsers.indexOf(currentUser) != -1 ? 'bi bi-hand-thumbs-up-fill' : 'bi bi-hand-thumbs-up' "></i>
+                            {{blog.likes}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</div>
+
+@if(!isLastPage){
+<div class="text-center mt-4 mb-3">
+    <button class="btn btn-outline-success " (click)="loadMore()">
+        Load More
+    </button>
+</div>
+}

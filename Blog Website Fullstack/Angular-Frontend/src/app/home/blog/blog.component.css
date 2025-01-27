@@ -1,0 +1,8 @@
+.selected-tag{
+    border-radius: 50px;
+    height: 1.5rem;
+    width: 1.5rem;
+    text-align: center;
+    color: black;
+}
+

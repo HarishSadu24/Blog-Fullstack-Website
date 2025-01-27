@@ -1,0 +1,53 @@
+.card {
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.card img {
+    max-height: 300px;
+    object-fit: cover;
+}
+
+.badge {
+    font-size: 0.8rem;
+    padding: 0.3em 0.6em;
+}
+
+.form-select-sm {
+    width: auto;
+}
+
+@keyframes hoverAnimation {
+    0% {
+        transform: scale(1);
+        box-shadow: none;
+    }
+
+    100% {
+        transform: scale(1.05);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    }
+}
+
+.card:hover {
+    animation: hoverAnimation 0.2s forwards;
+    animation-delay: 0.1s;
+    border: 0.5px solid rgb(5, 5, 5);
+    background-color:rgb(255, 254, 248);
+}
+
+.card:not(:hover) {
+    animation: none;
+    background-color: rgb(251, 252, 252);
+    border: 1px solid #6c757d;
+}
+
+.form-select:hover{
+    cursor: pointer;
+}
+
+.settings:hover{
+    cursor: pointer;
+}
+

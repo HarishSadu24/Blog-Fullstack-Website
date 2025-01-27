@@ -1,0 +1,10 @@
+.dropdown-menu{
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+    color: #0056b3;
+    border-radius: 4px;
+}
